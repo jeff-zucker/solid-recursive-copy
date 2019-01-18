@@ -9,11 +9,9 @@
   const solid = { auth:SolidAuthClient }
 
   go.addEventListener('click', event => {
-    var here = document.getElementById('from')
-    var there = document.getElementById('to')
+    var here = document.getElementById('from').value
+    var there = document.getElementById('to').value
     login().then( ()=> {    
-      here  = "https://jeffz.solid.community/public/solidsite2";
-      there = "https://jeffz.solid.community/public/solidsite";
       deepCopy(here,there).then( res => {
           console.log(res)
       }, err => { console.log("deepCopy error : "+err) });
