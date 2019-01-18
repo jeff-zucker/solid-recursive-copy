@@ -1,0 +1,38 @@
+<html><head>
+<script src="https://cdn.jsdelivr.net/npm/rdflib@0.19.1/dist/rdflib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/solid-auth-client@2.2.14/dist-lib/solid-auth-client.bundle.js">
+</script>
+<script src="../src/recurse.js"></script>
+
+<script>document.addEventListener('DOMContentLoaded', function() {
+
+  const solid = { auth:SolidAuthClient }
+
+  go.addEventListener('click', event => {
+    var here = document.getElementById('from')
+    var there = document.getElementById('to')
+    login().then( ()=> {    
+      here  = "https://jeffz.solid.community/public/solidsite2";
+      there = "https://jeffz.solid.community/public/solidsite";
+      deepCopy(here,there).then( res => {
+          console.log(res)
+      }, err => { console.log("deepCopy error : "+err) });
+    }, err => { console.log("login error : "+err) });
+  })
+
+async function login(){
+    const session = await solid.auth.currentSession()
+    if( !session ) return await solid.auth.login("https://solid.community")
+}
+
+})</script>
+</head>
+<body>
+  <div>
+  <input type="text" name="from" id="from" style="border: 0.1em solid green; font-size: 100%; margin=0.5em;"/>
+  <input type="text" id="to" style="border: 0.1em solid red"/>
+  <button id="go">go</button>
+  </div>
+</body>
+</html>
+

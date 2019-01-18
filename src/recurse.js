@@ -6,42 +6,51 @@
 // Use hashes from server to check identical trees?
 // See all the options on rsync, unison, etc etc!!
 
-const $rdf = require('rdflib')
+
+/* for browserless auth, otherwise ignored
+*/
+if(typeof window === "undefined") {
+    var $rdf = require('../node_modules/solid-auth-cli/tests/rdflib-modified')
+    var solid= {auth:require('solid-auth-cli')}
+    module.exports = deepCopy;
+}
+
+const kb = $rdf.graph()
+
+/* required for either browserless or browser
+*/
+const fetcher =  $rdf.fetcher(kb,{fetch:solid.auth.fetch});
 
 const ldp = $rdf.Namespace('http://www.w3.org/ns/ldp#')
 const RDF = $rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 
-const kb = $rdf.graph()
-const fetcher = $rdf.fetcher(kb)
-
-module.export = {
-  deepCopy
-}
-
-
-function deepCopy(src, dest, options, indent = ''){
+function _deepCopy(src, dest, options, indent){
+  indent = indent || '';
   options = options || {}
-  console.log(indent + 'deepCopy ' + src + ' -> ' + dest)
+  console.log(indent+'from ' + src + '\n'+indent+'to ' + dest)
   return new Promise(function(resolve, reject){
     function mapURI(src, dest, x){
       if (!x.uri.startsWith(src.uri)){
-        throw new Error('source {x} is not in tree {src}')
+        throw new Error("source '"+x+"' is not in tree "+src)
       }
       return kb.sym(dest.uri + x.uri.slice(src.uri.length))
     }
-    console.log(indent + ' deepCopy ' + src + ' -> ' + dest)
     fetcher.load(src).then(function(response) {
-      console.log(indent + '  ok = ' + response.status)
-      if (!response.ok) throw new Error('Error reading container ' + src + ' : ' + response.status)
-      let contents = kb.each(src, ldp('contains'))
+      if (!response.ok) throw new Error(
+          'Error reading container ' + src + ' : ' + response.status
+      )
+      var contents = kb.each(src, ldp('contains'))
       promises = []
-      for (let i=0; i < contents.length; i++){
-        let here = contents[i]
-        let there = mapURI(src, dest, here)
+      for (var i=0; i < contents.length; i++){
+        var here = contents[i]
+        var there = mapURI(src, dest, here)
         if (kb.holds(here, RDF('type'), ldp('Container'))){
-          promises.push(deepCopy(here, there, options, indent + '  '))
+          promises.push(_deepCopy(here, there, options, indent + '  '))
         } else { // copy a leaf
-          promises.push(fetcher.webCopy(here, there))
+          console.log('copying ' + there.value)
+          // requires but then ignores the type??
+          var type="text/turtle";
+          promises.push(fetcher.webCopy(here, there, {contentType:type}))
         }
       }
       Promise.all(promises).then(resolve(true)).catch(function (e) {
@@ -49,22 +58,27 @@ function deepCopy(src, dest, options, indent = ''){
         reject(e)
       })
     })
-    .catch(error => {
-      console.log('Load error: ' + error)
+    .catch( function(error) {
+      reject('Load error: ' + error)
     })
   })
 }
 
-// TEST ONLY
+/* jz: include this here or let user do it? 
+   if here, user does not need to require rdflib,
+*/
+function deepCopy(src,dest,options,indent){
+  return new Promise(function(resolve, reject){
+      if(typeof src==="string"){
+          if( !src.match(/\/$/))  src += "/";
+          if( !dest.match(/\/$/)) dest += "/";
+          src  = kb.sym(src)
+          dest = kb.sym(dest)
+       }
+      _deepCopy(src,dest,options,indent).then( response => {
+          resolve(response)
+      },function(e){ reject(e) })
+  });    
+}
 
-var source = kb.sym('https://timbl.com/timbl/Public/Test/')
-var destination = kb.sym('https://timbl.databox.me/Public/Test/')
-
-deepCopy(source, destination).then(function(){
-  console.log("Test Finished.")
-}).catch( function (e) {
-  console.log("Failed: e")
-})
-
-// wit for end
-//
+// END
