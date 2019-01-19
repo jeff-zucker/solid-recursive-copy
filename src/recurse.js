@@ -8,16 +8,19 @@
 
 
 /* for browserless auth, otherwise ignored
+   the only modification in rdflib is a conditional require of solid-auth-cli
+   in fetcher.js
 */
 if(typeof window === "undefined") {
     var $rdf = require('../node_modules/solid-auth-cli/tests/rdflib-modified')
     var solid= {auth:require('solid-auth-cli')}
     module.exports = deepCopy;
 }
-
 const kb = $rdf.graph()
 
-/* required for either browserless or browser
+/* required for browserless OR browser
+   I am not sure why both this & conditional require are needed
+   seems like one or the other should suffice
 */
 const fetcher =  $rdf.fetcher(kb,{fetch:solid.auth.fetch});
 
@@ -39,17 +42,19 @@ function _deepCopy(src, dest, options, indent){
       if (!response.ok) throw new Error(
           'Error reading container ' + src + ' : ' + response.status
       )
-      var contents = kb.each(src, ldp('contains'))
+      let contents = kb.each(src, ldp('contains'))
       promises = []
-      for (var i=0; i < contents.length; i++){
-        var here = contents[i]
-        var there = mapURI(src, dest, here)
+      for (let i=0; i < contents.length; i++){
+        let here = contents[i]
+        let there = mapURI(src, dest, here)
         if (kb.holds(here, RDF('type'), ldp('Container'))){
           promises.push(_deepCopy(here, there, options, indent + '  '))
         } else { // copy a leaf
           console.log('copying ' + there.value)
-          // requires but then ignores the type??
-          var type="text/turtle";
+          /*
+            complains if no type, but then ignores what it is set to???
+          */
+          let type="text/turtle";
           promises.push(fetcher.webCopy(here, there, {contentType:type}))
         }
       }
