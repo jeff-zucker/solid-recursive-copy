@@ -49,7 +49,7 @@
     "browserify": "^13.0.0",
     "minifyify": "^7.2.1",
     "qunit": "^0.9.0",
-    "solid-auth-cli": "^0.1.6",
+    "solid-auth-cli": "^0.1.8",
     "standard": "^5.4.1",
     "tape": "^4.4.0"
   },
