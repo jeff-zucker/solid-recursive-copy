@@ -31,7 +31,8 @@
   ],
   "author": "Tim Berners-Lee <timbl@mit.edu>",
   "contributors": [
-    "Daniel Friedman <danielf@mit.edu>"
+    "Daniel Friedman <danielf@mit.edu>",
+    "Jeff Zucker <dubzed@gmail.com>"
   ],
   "license": "MIT",
   "bugs": {
@@ -39,7 +40,7 @@
   },
   "homepage": "https://github.com/linkeddata/solid-recursive-copy",
   "dependencies": {
-    "rdflib": "^0.15.0",
+    "rdflib": "^0.19.1",
     "solid-auth-client": "*"
   },
   "devDependencies": {

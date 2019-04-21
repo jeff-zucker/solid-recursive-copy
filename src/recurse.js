@@ -7,21 +7,12 @@
 // See all the options on rsync, unison, etc etc!!
 
 
-/* for browserless auth, otherwise ignored
-   the only modification in rdflib is a conditional require of solid-auth-cli
-   in fetcher.js
-*/
 if(typeof window === "undefined") {
-    var $rdf = require('../node_modules/solid-auth-cli/tests/rdflib-modified')
+    var $rdf = require('rdflib')
     var solid= {auth:require('solid-auth-cli')}
     module.exports = deepCopy;
 }
 const kb = $rdf.graph()
-
-/* required for browserless OR browser
-   I am not sure why both this & conditional require are needed
-   seems like one or the other should suffice
-*/
 const fetcher =  $rdf.fetcher(kb,{fetch:solid.auth.fetch});
 
 const ldp = $rdf.Namespace('http://www.w3.org/ns/ldp#')
