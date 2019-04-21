@@ -16,7 +16,8 @@ If you are copying between two pods using https://, you must login with a webId 
 
 ## Usage
 
-    ```javascript
+```javascript
+
     // define here and there as absolute URLs
     solid.auth.login().then( session => {
         deepCopy( here, there ).then( res => {
@@ -24,7 +25,8 @@ If you are copying between two pods using https://, you must login with a webId 
             else console.log(res.status,res.statusText);
         },e => console.log("Error copying : "+e))
     },e => console.log("Error logging in : "+e))
-    ```
+
+```
 
 The library is designed for in-browser use, in a web app, or on the command line with node.js.
 
