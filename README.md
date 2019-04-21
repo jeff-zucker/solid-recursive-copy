@@ -19,7 +19,7 @@ If you are copying between two pods using https://, you must login with a webId 
 ```javascript
 
     // define here and there as absolute URLs
-    solid.auth.login().then( session => {
+    solid.auth.login().then( () => {
         deepCopy( here, there ).then( res => {
             if(res.ok) console.log(res);
             else console.log(res.status,res.statusText);
