@@ -1,5 +1,4 @@
 #!/usr/bin/env node
-const $rdf = require('rdflib')
 const auth = require('solid-auth-cli')
 const deepCopy = require('../src/recurse.js')
 
@@ -13,7 +12,7 @@ const there = process.argv[3]
 console.log(`logging in`)
 auth.login().then( session => {
     console.log(`logged in as <${session.webId}>`)
-    deepCopy( $rdf.sym(here), $rdf.sym(there) ).then( res => {
+    deepCopy( here, there ).then( res => {
         console.log(res);
     },e => console.log("Error copying : "+e))
 },e => console.log("Error logging in : "+e))
