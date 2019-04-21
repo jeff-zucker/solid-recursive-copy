@@ -8,9 +8,9 @@ Copies a container and all of its contained resources from one Solid-compatible 
 
 Solid-compatible information spaces currently include:
 
-   https:// online or localhost Solid pods
-   file://  local file-system treated as a mini pod by solid-auth-cli
-   app://   in-browser localStorage treated as a mini pod by solid-rest-browser
+   * https:// online or localhost Solid pods
+   * file://  local file-system treated as a mini pod by solid-auth-cli
+   * app://   in-browser localStorage treated as a mini pod by solid-rest-browser
 
 If you are copying between two pods using https://, you must login with a webId that has access to both pods.
 
