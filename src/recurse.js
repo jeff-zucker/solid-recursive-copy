@@ -6,10 +6,9 @@
 // Use hashes from server to check identical trees?
 // See all the options on rsync, unison, etc etc!!
 
-
 if(typeof window === "undefined") {
-    var $rdf = require('rdflib')
-    var solid= {auth:require('solid-auth-cli')}
+    var $rdf  = require('rdflib')
+    var solid = {auth:require('solid-auth-cli')}
     module.exports = deepCopy;
 }
 const kb = $rdf.graph()
@@ -43,7 +42,7 @@ function deepCopy(src, dest, options, indent){
         let here = contents[i]
         let there = mapURI(src, dest, here)
         if (kb.holds(here, RDF('type'), ldp('Container'))){
-          promises.push(_deepCopy(here, there, options, indent + '  '))
+          promises.push(deepCopy(here, there, options, indent + '  '))
         } else { // copy a leaf
           console.log('copying ' + there.value)
           /*
@@ -53,7 +52,7 @@ function deepCopy(src, dest, options, indent){
           promises.push(fetcher.webCopy(here, there, {contentType:type}))
         }
       }
-      Promise.all(promises).then(resolve(true)).catch(function (e) {
+      Promise.all(promises).then(resolve("Copying Successful")).catch(function (e) {
         console.log("Overall promise rejected: " + e)
         reject(e)
       })
