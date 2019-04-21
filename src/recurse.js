@@ -22,10 +22,11 @@ function deepCopy(src, dest, options, indent){
   indent = indent || '';
   options = options || {}
   console.log(indent+'from ' + src + '\n'+indent+'to ' + dest)
+  src = (typeof src ==="string") ? $rdf.sym(src) : src;
+  dest = (typeof dest ==="string") ? $rdf.sym(dest) : dest;
   src.uri = (src.uri.match(/\/$/)) ? src.uri : src.uri + "/";
   dest.uri = (dest.uri.match(/\/$/)) ? dest.uri : dest.uri + "/";
  return new Promise(function(resolve, reject){
-    if(typeof src ==="string" || typeof dest ==="string") reject("To and From must be NamedNodes, not strings")
     function mapURI(src, dest, x){
       if (!x.uri.startsWith(src.uri)){
         throw new Error("source '"+x+"' is not in tree "+src)

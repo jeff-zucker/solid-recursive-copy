@@ -13,9 +13,8 @@ const there = process.argv[3]
 console.log(`logging in`)
 auth.login().then( session => {
     console.log(`logged in as <${session.webId}>`)
-        deepCopy( $rdf.sym(here), $rdf.sym(there) ).then( res => {
+    deepCopy( $rdf.sym(here), $rdf.sym(there) ).then( res => {
         console.log(res);
     },e => console.log("Error copying : "+e))
 },e => console.log("Error logging in : "+e))
-
 /* END */
