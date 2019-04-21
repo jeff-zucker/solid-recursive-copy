@@ -15,6 +15,7 @@ Solid-compatible information spaces currently include:
 If you are copying between two pods using https://, you must login with a webId that has access to both pods.
 
 ## Usage
+
     ```javascript
     // define here and there as absolute URLs
     solid.auth.login().then( session => {
