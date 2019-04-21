@@ -40,8 +40,9 @@
   },
   "homepage": "https://github.com/linkeddata/solid-recursive-copy",
   "dependencies": {
-    "rdflib": "^0.19.1",
-    "solid-auth-client": "*"
+    "rdflib": "^0.20.1",
+    "solid-auth-client": "*",
+    "solid-auth-cli": "^0.2.2"
   },
   "devDependencies": {
     "babel-cli": "^6.18.0",
@@ -50,7 +51,6 @@
     "browserify": "^13.0.0",
     "minifyify": "^7.2.1",
     "qunit": "^0.9.0",
-    "solid-auth-cli": "^0.1.8",
     "standard": "^5.4.1",
     "tape": "^4.4.0"
   },

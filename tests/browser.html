@@ -1,6 +1,6 @@
 <html><head>
-<script src="https://cdn.jsdelivr.net/npm/rdflib@0.19.1/dist/rdflib.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/solid-auth-client@2.2.14/dist-lib/solid-auth-client.bundle.js">
+<script src="https://cdn.jsdelivr.net/npm/rdflib@0.20.1/dist/rdflib.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/solid-auth-client@2.3.0/dist-lib/solid-auth-client.bundle.js">
 </script>
 <script src="../src/recurse.js"></script>
 
@@ -12,7 +12,7 @@
     var here = document.getElementById('from').value
     var there = document.getElementById('to').value
     login().then( ()=> {    
-      deepCopy(here,there).then( res => {
+      deepCopy($rdf.sym(here),$rdf.sym(there)).then( res => {
           console.log(res)
       }, err => { console.log("deepCopy error : "+err) });
     }, err => { console.log("login error : "+err) });

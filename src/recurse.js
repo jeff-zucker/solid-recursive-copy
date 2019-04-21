@@ -18,11 +18,14 @@ const fetcher =  $rdf.fetcher(kb,{fetch:solid.auth.fetch});
 const ldp = $rdf.Namespace('http://www.w3.org/ns/ldp#')
 const RDF = $rdf.Namespace('http://www.w3.org/1999/02/22-rdf-syntax-ns#')
 
-function _deepCopy(src, dest, options, indent){
+function deepCopy(src, dest, options, indent){
   indent = indent || '';
   options = options || {}
   console.log(indent+'from ' + src + '\n'+indent+'to ' + dest)
-  return new Promise(function(resolve, reject){
+  src.uri = (src.uri.match(/\/$/)) ? src.uri : src.uri + "/";
+  dest.uri = (dest.uri.match(/\/$/)) ? dest.uri : dest.uri + "/";
+ return new Promise(function(resolve, reject){
+    if(typeof src ==="string" || typeof dest ==="string") reject("To and From must be NamedNodes, not strings")
     function mapURI(src, dest, x){
       if (!x.uri.startsWith(src.uri)){
         throw new Error("source '"+x+"' is not in tree "+src)
@@ -59,22 +62,4 @@ function _deepCopy(src, dest, options, indent){
     })
   })
 }
-
-/* jz: include this here or let user do it? 
-   if here, user does not need to require rdflib,
-*/
-function deepCopy(src,dest,options,indent){
-  return new Promise(function(resolve, reject){
-      if(typeof src==="string"){
-          if( !src.match(/\/$/))  src += "/";
-          if( !dest.match(/\/$/)) dest += "/";
-          src  = kb.sym(src)
-          dest = kb.sym(dest)
-       }
-      _deepCopy(src,dest,options,indent).then( response => {
-          resolve(response)
-      },function(e){ reject(e) })
-  });    
-}
-
 // END
